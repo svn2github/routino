@@ -1192,6 +1192,9 @@ function dragWaypointMapDrop(e)
 
  if(!routino.point[dragged_marker].active)
     markerToggleMap(dragged_marker);
+
+ if(routino.point[dragged_marker].search=="")
+    markerCoords(dragged_marker);
 }
 
 
@@ -1739,7 +1742,7 @@ function markerRemoveForm(marker)
 function markerClearForm(marker)
 {
  markerRemoveMap(marker);
- markerCoords(marker);
+ markerSearch(marker);
 
  formSetCoords(marker,"","");
  formSetSearch(marker,"");
