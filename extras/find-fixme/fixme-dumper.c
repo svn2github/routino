@@ -3,7 +3,7 @@
 
  Part of the Routino routing software.
  ******************/ /******************
- This file Copyright 2013-2015 Andrew M. Bishop
+ This file Copyright 2013-2015, 2018 Andrew M. Bishop
 
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU Affero General Public License as published by
@@ -265,7 +265,7 @@ static const char* const months[12]={"Jan","Feb","Mar","Apr","May","Jun","Jul","
 
 static char *RFC822Date(time_t t)
 {
- static char value[32]; /* static allocation of return value */
+ static char value[80]; /* static allocation of return value */
  char weekday[4];
  char month[4];
  struct tm *tim;
