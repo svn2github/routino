@@ -25,3 +25,6 @@ plot-time   - Plots the output of 'planetsplitter --loggable --logtime' to show
 find-fixme -  A modified version of the Routino planetsplitter and filedumper
               programs to scan an OSM file for "fixme" tags and create a
               database so that web pages provided can display them.
+
+statistics -  A collection of scripts and compiled code to extract statistics
+              from the Routino database and create a map of the data.
