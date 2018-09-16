@@ -4,7 +4,7 @@
 #
 # Part of the Routino routing software.
 #
-# This file Copyright 2011-2014 Andrew M. Bishop
+# This file Copyright 2011-2014, 2018 Andrew M. Bishop
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -53,13 +53,6 @@ while(<STDIN>)
       s%nodes [0-9]+ and [0-9]+ in way [0-9]+%nodes <node-id1> and <node-id2> in way <way-id>%;
      }
 
-   elsif(m%node ([0-9]+) in way ([0-9]+)%i) # Special case node and a way
-     {
-      $errorid="($1 $2)";
-      $errortype="NW";
-      s%Node [0-9]+ in way [0-9]+%Node <node-id> in way <way-id>%;
-     }
-
    elsif(m%way ([0-9]+) contains node ([0-9]+)%i) # Special case way and node
      {
       $errorid="($1 $2)";
@@ -67,18 +60,11 @@ while(<STDIN>)
       s%Way [0-9]+ contains node [0-9]+%Way <way-id> contains node <node-id>%;
      }
 
-   elsif(m%nodes ([0-9]+) and ([0-9]+)%i) # Special case pair of nodes
+   elsif(m%nodes ([0-9]+) and ([0-9]+)%i) # Special case pair of nodes (multiple ways)
      {
       $errorid="($1 $2)";
       $errortype="N2";
       s%nodes [0-9]+ and [0-9]+%nodes <node-id1> and <node-id2>%;
-     }
-
-   elsif(m%Segment (contains|connects) node ([0-9]+)%) # Special case node
-     {
-      $errorid=$2;
-      $errortype="N";
-      s%node [0-9]+%node <node-id>%;
      }
 
    elsif(m%Relation ([0-9]+).* contains Node ([0-9]+)%) # Special case relation/node
@@ -178,8 +164,8 @@ else
          "<STYLE type=\"text/css\">\n".
          "<!--\n".
          "   body {font-family: sans-serif; font-size: 12px;}\n".
-         "   h1   {font-family: sans-serif; font-size: 14px; font-style: bold;}\n".
-         "   h2   {font-family: sans-serif; font-size: 13px; font-style: bold;}\n".
+         "   h1   {font-family: sans-serif; font-size: 18px; font-style: bold;}\n".
+         "   h2   {font-family: sans-serif; font-size: 15px; font-style: bold;}\n".
          "   h3   {font-family: sans-serif; font-size: 12px; font-style: bold;}\n".
          "-->\n".
          "</STYLE>\n".
@@ -196,28 +182,50 @@ else
 
    my %errortypeorder=(
                        "N"   , 1,
-                       "NW"  , 2,
-                       "WN"  , 3,
-                       "N2W" , 4,
-                       "N2"  , 5,
-                       "W"   , 6,
-                       "R"   , 7,
-                       "RN"  , 8,
-                       "RW"  , 9,
-                       "E"   , 10
+                       "WN"  , 2,
+                       "N2W" , 3,
+                       "N2"  , 4,
+                       "W"   , 5,
+                       "R"   , 6,
+                       "RN"  , 7,
+                       "RW"  , 8,
+                       "E"   , 9
+                      );
+
+   my %errortypeheader=(
+                       "N"   , "Node Errors",
+                       "WN"  , "Node Errors in Ways",
+                       "N2W" , "Node Pair Errors (Single Way)",
+                       "N2"  , "Node Pair Errors (Multiple Ways)",
+                       "W"   , "Way Errors",
+                       "R"   , "Relation Errors",
+                       "RN"  , "Node Error in Relation",
+                       "RW"  , "Way Error in Relation",
+                       "E"   , "Unknown Error"
+                      );
+
+   my %errortypedesc=(
+                       "N"   , "A Node has an error.",
+                       "WN"  , "A way has an error with a node that it contains (if the node is not in Routino database it may not have been in the original OSM database).",
+                       "N2W" , "A way has an error with a pair of nodes that it contains.",
+                       "N2"  , "A pair of connected nodes have an error with more than one way (unspecified in error message) that connects them.",
+                       "W"   , "A Way has an error.",
+                       "R"   , "A Relation has an error.",
+                       "RN"  , "A relation has an error with a node that it contains (if the node is not in Routino database it may not have been in the original OSM database or it may not be a highway node or the highway may have been discarded because of access permissions).",
+                       "RW"  , "A relation has an error with a way that it contains (if the way is not in Routino database it may not have been in the original OSM database or it may not be a highway or it may have been discarded because of access permissions).",
+                       "E"   , "An error message in the log file is not understood by the log summariser."
                       );
 
    my %errortypelabel=(
-                       "N"   , "Nodes",
-                       "NW"  , "Node in a Way",
-                       "WN"  , "Way contains Node",
-                       "N2W" , "Node Pairs in a Way",
-                       "N2"  , "Node Pairs",
-                       "W"   , "Ways",
-                       "R"   , "Relations",
-                       "RN"  , "Relations/Nodes",
-                       "RW"  , "Relations/Ways",
-                       "E"   , "ERROR"
+                       "N"   , "Node list",
+                       "WN"  , "(Way Node) list",
+                       "N2W" , "(Node Node Way) list",
+                       "N2"  , "(Node Node) list",
+                       "W"   , "Way list",
+                       "R"   , "Relation list",
+                       "RN"  , "(Relation Node) list",
+                       "RW"  , "(Relation Way) list",
+                       "E"   , "<i>No data</i>"
                       );
 
    my $lasterrortype="";
@@ -234,15 +242,18 @@ else
 
       if($errortypes{$error} ne $lasterrortype)
         {
-         print "<h2>$errortypelabel{$errortypes{$error}}</h2>\n";
+         print "<h2>$errortypeheader{$errortypes{$error}}</h2>\n";
+         print "$errortypedesc{$errortypes{$error}}\n";
          $lasterrortype=$errortypes{$error};
         }
 
       print "<h3>$errorhtml</h3>\n";
 
+      print "$errors{$error} occurences; ";
+
       if($errors{$error}>100)
         {
-         print "$errors{$error} occurences (not listed).\n";
+         print "too many to list individually.";
         }
       else
         {
@@ -258,7 +269,7 @@ else
               }
             else
               {
-               print ",";
+               print ",\n";
               }
 
             $first=0;
@@ -267,10 +278,9 @@ else
             print "<a href=\"http://www.openstreetmap.org/browse/way/$id\">$id</a>" if($errortypes{$error} eq "W");
             print "<a href=\"http://www.openstreetmap.org/browse/relation/$id\">$id</a>" if($errortypes{$error} eq "R");
 
-            if($errortypes{$error} eq "NW" || $errortypes{$error} eq "WN" || $errortypes{$error} eq "N2" || $errortypes{$error} eq "RN" || $errortypes{$error} eq "RW")
+            if($errortypes{$error} eq "WN" || $errortypes{$error} eq "N2" || $errortypes{$error} eq "RN" || $errortypes{$error} eq "RW")
               {
                $id =~ m%\(([0-9]+) ([0-9]+)\)%;
-               print "(<a href=\"http://www.openstreetmap.org/browse/node/$1\">$1</a> <a href=\"http://www.openstreetmap.org/browse/way/$2\">$2</a>)" if($errortypes{$error} eq "NW");
                print "(<a href=\"http://www.openstreetmap.org/browse/way/$1\">$1</a> <a href=\"http://www.openstreetmap.org/browse/node/$2\">$2</a>)" if($errortypes{$error} eq "WN");
                print "(<a href=\"http://www.openstreetmap.org/browse/node/$1\">$1</a> <a href=\"http://www.openstreetmap.org/browse/node/$2\">$2</a>)" if($errortypes{$error} eq "N2");
                print "(<a href=\"http://www.openstreetmap.org/browse/relation/$1\">$1</a> <a href=\"http://www.openstreetmap.org/browse/node/$2\">$2</a>)" if($errortypes{$error} eq "RN");
@@ -282,9 +292,9 @@ else
                $id =~ m%\(([0-9]+) ([0-9]+) ([0-9]+)\)%;
                print "(<a href=\"http://www.openstreetmap.org/browse/node/$1\">$1</a> <a href=\"http://www.openstreetmap.org/browse/node/$2\">$2</a> <a href=\"http://www.openstreetmap.org/browse/way/$3\">$3</a>)" if($errortypes{$error} eq "N2W");
               }
-
-            print "\n";
            }
+
+         print "\n";
         }
      }
 

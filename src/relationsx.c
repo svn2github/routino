@@ -3,7 +3,7 @@
 
  Part of the Routino routing software.
  ******************/ /******************
- This file Copyright 2010-2015 Andrew M. Bishop
+ This file Copyright 2010-2015, 2018 Andrew M. Bishop
 
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU Affero General Public License as published by
@@ -743,7 +743,7 @@ void ProcessRouteRelations(RelationsX *relationsx,WaysX *waysx,int keep)
                 ways++;
                }
              else
-                logerror("Route Relation %"Prelation_t" contains Way %"Pway_t" that does not exist in the Routino database (not a highway?).\n",logerror_relation(relationx.id),logerror_way(wayid));
+                logerror("Route Relation %"Prelation_t" contains Way %"Pway_t" that does not exist in the Routino database.\n",logerror_relation(relationx.id),logerror_way(wayid));
             }
          }
 
@@ -878,21 +878,21 @@ void ProcessTurnRelations(RelationsX *relationsx,NodesX *nodesx,SegmentsX *segme
 
     if(via==NO_NODE)
       {
-       logerror("Turn Relation %"Prelation_t" contains Node %"Pnode_t" that does not exist in the Routino database (not a highway node?).\n",logerror_relation(relationx.id),logerror_node(relationx.via));
+       logerror("Turn Relation %"Prelation_t" contains Node %"Pnode_t" that does not exist in the Routino database.\n",logerror_relation(relationx.id),logerror_node(relationx.via));
        deleted++;
        goto endloop;
       }
 
     if(from==NO_WAY)
       {
-       logerror("Turn Relation %"Prelation_t" contains Way %"Pway_t" that does not exist in the Routino database (not a highway?).\n",logerror_relation(relationx.id),logerror_way(relationx.from));
+       logerror("Turn Relation %"Prelation_t" contains Way %"Pway_t" that does not exist in the Routino database.\n",logerror_relation(relationx.id),logerror_way(relationx.from));
        deleted++;
        goto endloop;
       }
 
     if(to==NO_WAY)
       {
-       logerror("Turn Relation %"Prelation_t" contains Way %"Pway_t" that does not exist in the Routino database (not a highway?).\n",logerror_relation(relationx.id),logerror_way(relationx.to));
+       logerror("Turn Relation %"Prelation_t" contains Way %"Pway_t" that does not exist in the Routino database.\n",logerror_relation(relationx.id),logerror_way(relationx.to));
        deleted++;
        goto endloop;
       }

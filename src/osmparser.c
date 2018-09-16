@@ -3,7 +3,7 @@
 
  Part of the Routino routing software.
  ******************/ /******************
- This file Copyright 2008-2015 Andrew M. Bishop
+ This file Copyright 2008-2015, 2018 Andrew M. Bishop
 
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU Affero General Public License as published by
@@ -61,7 +61,9 @@ static int         relation_nways;
 static relation_t *relation_relations;
 static int         relation_nrelations;
 static way_t       relation_from;
+static int         relation_from_count;
 static way_t       relation_to;
+static int         relation_to_count;
 static node_t      relation_via;
 
 /* Local parsing functions */
@@ -161,8 +163,11 @@ void AddRelationRefs(int64_t node_id,int64_t way_id,int64_t relation_id,const ch
     relation_nrelations=0;
 
     relation_from=NO_WAY_ID;
-    relation_via=NO_NODE_ID;
+    relation_from_count=0;
+    relation_from_count=0;
     relation_to=NO_WAY_ID;
+    relation_to_count=0;
+    relation_via=NO_NODE_ID;
    }
  else if(node_id!=0)
    {
@@ -197,9 +202,17 @@ void AddRelationRefs(int64_t node_id,int64_t way_id,int64_t relation_id,const ch
     if(role)
       {
        if(!strcmp(role,"from"))
-          relation_from=id;
+         {
+          relation_from_count++;
+          if(relation_from==NO_WAY_ID)
+             relation_from=id;
+         }
        else if(!strcmp(role,"to"))
-          relation_to=id;
+         {
+          relation_to_count++;
+          if(relation_to==NO_WAY_ID)
+             relation_to=id;
+         }
       }
    }
  else /* if(relation_id!=0) */
@@ -1009,21 +1022,36 @@ void ProcessRelationTags(TagList *tags,int64_t relation_id,int mode)
        /* Extra logerror information since relation isn't stored */
        if(relation_to!=NO_WAY_ID) logerror_way(relation_to);
        if(relation_via!=NO_NODE_ID) logerror_node(relation_via);
-       logerror("Relation %"Prelation_t" is a turn restriction but has no 'from' way.\n",logerror_relation(id));
+       logerror("Turn Relation %"Prelation_t" has no 'from' way.\n",logerror_relation(id));
       }
     if(relation_to==NO_WAY_ID)
       {
        /* Extra logerror information since relation isn't stored */
        if(relation_via!=NO_NODE_ID) logerror_node(relation_via);
        if(relation_from!=NO_WAY_ID) logerror_way(relation_from);
-       logerror("Relation %"Prelation_t" is a turn restriction but has no 'to' way.\n",logerror_relation(id));
+       logerror("Turn Relation %"Prelation_t" has no 'to' way.\n",logerror_relation(id));
       }
     if(relation_via==NO_NODE_ID)
       {
        /* Extra logerror information since relation isn't stored */
        if(relation_to!=NO_WAY_ID) logerror_way(relation_to);
        if(relation_from!=NO_WAY_ID) logerror_way(relation_from);
-       logerror("Relation %"Prelation_t" is a turn restriction but has no 'via' node.\n",logerror_relation(id));
+       logerror("Turn Relation %"Prelation_t" has no 'via' node.\n",logerror_relation(id));
+      }
+
+    if(relation_from_count>1)
+      {
+       if(relation_to!=NO_WAY_ID) logerror_way(relation_to);
+       if(relation_via!=NO_NODE_ID) logerror_node(relation_via);
+       if(relation_from!=NO_WAY_ID) logerror_way(relation_from);
+       logerror("Turn Relation %"Prelation_t" has more than one 'from' Way (used first one).\n",logerror_relation(relation_id));
+      }
+    if(relation_to_count>1)
+      {
+       if(relation_to!=NO_WAY_ID) logerror_way(relation_to);
+       if(relation_via!=NO_NODE_ID) logerror_node(relation_via);
+       if(relation_from!=NO_WAY_ID) logerror_way(relation_from);
+       logerror("Turn Relation %"Prelation_t" has more than one 'to' Way (used first one).\n",logerror_relation(relation_id));
       }
 
     if(relation_from!=NO_WAY_ID && relation_to!=NO_WAY_ID && relation_via!=NO_NODE_ID)
