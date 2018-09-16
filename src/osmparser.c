@@ -65,6 +65,7 @@ static int         relation_from_count;
 static way_t       relation_to;
 static int         relation_to_count;
 static node_t      relation_via;
+static int         relation_via_count;
 
 /* Local parsing functions */
 
@@ -168,6 +169,7 @@ void AddRelationRefs(int64_t node_id,int64_t way_id,int64_t relation_id,const ch
     relation_to=NO_WAY_ID;
     relation_to_count=0;
     relation_via=NO_NODE_ID;
+    relation_via_count=0;
    }
  else if(node_id!=0)
    {
@@ -184,7 +186,11 @@ void AddRelationRefs(int64_t node_id,int64_t way_id,int64_t relation_id,const ch
     if(role)
       {
        if(!strcmp(role,"via"))
-          relation_via=id;
+         {
+          relation_via_count++;
+          if(relation_via==NO_NODE_ID)
+             relation_via=id;
+         }
       }
    }
  else if(way_id!=0)
@@ -1052,6 +1058,13 @@ void ProcessRelationTags(TagList *tags,int64_t relation_id,int mode)
        if(relation_via!=NO_NODE_ID) logerror_node(relation_via);
        if(relation_from!=NO_WAY_ID) logerror_way(relation_from);
        logerror("Turn Relation %"Prelation_t" has more than one 'to' Way (used first one).\n",logerror_relation(relation_id));
+      }
+    if(relation_via_count>1)
+      {
+       if(relation_to!=NO_WAY_ID) logerror_way(relation_to);
+       if(relation_via!=NO_NODE_ID) logerror_node(relation_via);
+       if(relation_from!=NO_WAY_ID) logerror_way(relation_from);
+       logerror("Turn Relation %"Prelation_t" has more than one 'via' Node (used first one).\n",logerror_relation(relation_id));
       }
 
     if(relation_from!=NO_WAY_ID && relation_to!=NO_WAY_ID && relation_via!=NO_NODE_ID)
