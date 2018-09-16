@@ -4,7 +4,7 @@
 #
 # Part of the Routino routing software.
 #
-# This file Copyright 2008-2016 Andrew M. Bishop
+# This file Copyright 2008-2016, 2018 Andrew M. Bishop
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -27,7 +27,6 @@ trap "rm binned.dat" 0
 # Database location and zoom - PARAMETERS THAT CAN BE EDITED
 
 database_dir="../../web/data"
-database_dir="/home/amb/www/local/cgi-temp/routino-data"
 zoom=13
 
 # Run the dumper
