@@ -5,7 +5,7 @@
 
      Part of the Routino routing software.
      ============================================================
-     This file Copyright 2010-2015 Andrew M. Bishop
+     This file Copyright 2010-2015, 2018 Andrew M. Bishop
 
      This program is free software: you can redistribute it and/or modify
      it under the terms of the GNU Affero General Public License as published by
@@ -179,13 +179,18 @@
 
     <if v="designated"  > <set v="yes"/> </if>
     <if v="permissive"  > <set v="yes"/> </if>
-    <if v="destination" > <set v="yes"/> </if>
     <if v="true"        > <set v="yes"/> </if>
     <if v="public"      > <set v="yes"/> </if>
     <if v="official"    > <set v="yes"/> </if>
 
-    <if v="unsuitable"  > <set v="no"/> </if>
+    <if v="destination" > <set v="yes"/> </if>
+    <if v="customer"    > <set v="yes"/> </if>
+    <if v="customers"   > <set v="yes"/> </if>
+    <if v="delivery"    > <set v="no"/> </if>
+    <if v="residents"   > <set v="no"/> </if>
     <if v="private"     > <set v="no"/> </if>
+
+    <if v="unsuitable"  > <set v="no"/> </if>
     <if v="limited"     > <set v="no"/> </if>
     <if v="restricted"  > <set v="no"/> </if>
     <if v="agricultural"> <set v="no"/> </if>
@@ -620,15 +625,18 @@
 
       <if v="designated"  > <set v="yes"/> </if>
       <if v="permissive"  > <set v="yes"/> </if>
-      <if v="destination" > <set v="yes"/> </if>
       <if v="true"        > <set v="yes"/> </if>
       <if v="public"      > <set v="yes"/> </if>
-      <if v="customers"   > <set v="yes"/> </if>
-      <if v="customer"    > <set v="yes"/> </if>
       <if v="official"    > <set v="yes"/> </if>
 
-      <if v="unsuitable"  > <set v="no"/> </if>
+      <if v="destination" > <set v="yes"/> </if>
+      <if v="customer"    > <set v="yes"/> </if>
+      <if v="customers"   > <set v="yes"/> </if>
+      <if v="delivery"    > <set v="no"/> </if>
+      <if v="residents"   > <set v="no"/> </if>
       <if v="private"     > <set v="no"/> </if>
+
+      <if v="unsuitable"  > <set v="no"/> </if>
       <if v="limited"     > <set v="no"/> </if>
       <if v="restricted"  > <set v="no"/> </if>
       <if v="agricultural"> <set v="no"/> </if>
