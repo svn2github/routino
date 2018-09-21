@@ -989,6 +989,7 @@
 
       <if k="name"> <output/> </if>
       <if k="ref" > <output/> </if>
+      <ifnot k="ref" > <if k="prow_ref" > <output k="ref"/> </if> </ifnot>
 
       <!-- Output the area tag -->
 
