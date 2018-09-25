@@ -3,7 +3,7 @@
 
  Part of the Routino routing software.
  ******************/ /******************
- This file Copyright 2008-2016 Andrew M. Bishop
+ This file Copyright 2008-2016, 2018 Andrew M. Bishop
 
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU Affero General Public License as published by
@@ -266,7 +266,7 @@ int main(int argc,char** argv)
     {
      if(access(translations,F_OK))
        {
-        fprintf(stderr,"Error: The '--translations' option specifies a file that does not exist.\n");
+        fprintf(stderr,"Error: The '--translations' option specifies a file '%s' that does not exist.\n",translations);
         exit(EXIT_FAILURE);
        }
     }
@@ -304,7 +304,7 @@ int main(int argc,char** argv)
         char **list1=Routino_GetTranslationLanguages();
         char **list2=Routino_GetTranslationLanguageFullNames();
 
-        fprintf(stderr,"Warning: Cannot find a translation called '%s' in the file '%s'.\n",language,translations);
+        fprintf(stderr,"Error: Cannot find a translation called '%s' in the file '%s'.\n",language,translations);
 
         fprintf(stderr,"Languages available are: %s (%s)",*list1++,*list2++);
         while(*list1)
@@ -320,7 +320,7 @@ int main(int argc,char** argv)
 
      if(!translation)
        {
-        fprintf(stderr,"Warning: No translations in '%s'.\n",translations);
+        fprintf(stderr,"Error: No translations in '%s'.\n",translations);
         exit(EXIT_FAILURE);
        }
     }
