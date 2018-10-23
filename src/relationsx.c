@@ -230,6 +230,7 @@ void AppendRouteRelationList(RelationsX* relationsx,relation_t id,
                              relation_t *relations,int nrelations)
 {
  RouteRelX relationx={0};
+ unsigned long longsize;
  FILESORT_VARINT size;
  node_t nonode=NO_NODE_ID;
  way_t noway=NO_WAY_ID;
@@ -238,9 +239,13 @@ void AppendRouteRelationList(RelationsX* relationsx,relation_t id,
  relationx.id=id;
  relationx.routes=routes;
 
- size=sizeof(RouteRelX)+(nnodes+1)*sizeof(node_t)+(nways+1)*sizeof(way_t)+(nrelations+1)*sizeof(relation_t);
+ longsize=sizeof(RouteRelX)+(nnodes+1)*sizeof(node_t)+(nways+1)*sizeof(way_t)+(nrelations+1)*sizeof(relation_t);
 
- WriteFileBuffered(relationsx->rrfd,&size,FILESORT_VARSIZE);
+ logassert(longsize<FILESORT_MAXINT,"Route relation contains too much data (change FILESORT_VARINT to 32-bits?)"); /* Ensure no overflow of FILESORT_VARINT integer */
+
+ size=longsize;
+
+ WriteFileBuffered(relationsx->rrfd,&size     ,FILESORT_VARSIZE);
  WriteFileBuffered(relationsx->rrfd,&relationx,sizeof(RouteRelX));
 
  WriteFileBuffered(relationsx->rrfd,nodes  ,nnodes*sizeof(node_t));
