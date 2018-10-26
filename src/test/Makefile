@@ -2,7 +2,7 @@
 #
 # Part of the Routino routing software.
 #
-# This file Copyright 2011-2015 Andrew M. Bishop
+# This file Copyright 2011-2015, 2018 Andrew M. Bishop
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -22,14 +22,9 @@
 
 include ../../Makefile.conf
 
-# executables
+# Executables
 
 EXE=is-fast-math$(.EXE)
-
-# Compilation targets
-
-O=$(notdir $(wildcard *.osm))
-S=$(foreach f,$(O),$(addsuffix .sh,$(basename $f)))
 
 ########
 
@@ -38,7 +33,7 @@ all :
 ########
 
 test : test-exe $(EXE)
-	@./run-tests.sh $(S)
+	@./run-all-tests.sh
 
 ########
 

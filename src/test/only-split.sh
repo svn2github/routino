@@ -1,35 +1,6 @@
 #!/bin/sh
 
-# Exit on error
-
-set -e
-
-# Test name
-
-name=`basename $0 .sh`
-
-# Slim or non-slim
-
-if [ "$1" = "slim" ]; then
-    slim="-slim"
-    dir="slim"
-else
-    slim=""
-    dir="fat"
-fi
-
-# Libroutino or not libroutino
-
-LD_LIBRARY_PATH=$PWD/..:$LD_LIBRARY_PATH
-export LD_LIBRARY_PATH
-
-if [ "$2" = "lib" ]; then
-    lib="+lib"
-else
-    lib=""
-fi
-
-# Pruned or non-pruned
+# Pruned or non-pruned - special case
 
 if [ "$2" = "prune" ]; then
 
@@ -46,40 +17,10 @@ else
     pruned=""
 fi
 
-# Create the output directory
-
-dir=$dir$lib$pruned
-
-[ -d $dir ] || mkdir $dir
-
-# Run the programs under a run-time debugger
-
-debugger=${TEST_DEBUGGER:-}
-
-# Name related options
-
-osm=$name.osm
-log=$name$lib$slim$pruned.log
-
-option_prefix="--prefix=$name"
-option_dir="--dir=$dir"
-
-# Generic program options
-
-option_planetsplitter="--loggable --tagging=../../xml/routino-tagging.xml --errorlog $prune"
-option_filedumper="--dump-osm"
-
 # Run planetsplitter
 
-echo "Running planetsplitter"
-
-echo ../planetsplitter$slim $option_dir $option_prefix $option_planetsplitter $osm > $log
-$debugger ../planetsplitter$slim $option_dir $option_prefix $option_planetsplitter $osm >> $log
+run_planetsplitter $prune
 
 # Run filedumper
 
-echo "Running filedumper"
-
-echo ../filedumper$slim $option_dir $option_prefix $option_filedumper >> $log
-$debugger ../filedumper$slim $option_dir $option_prefix $option_filedumper > $dir/$osm
-
+run_filedumper

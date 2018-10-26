@@ -5,6 +5,9 @@
 debugger=valgrind
 debugger=
 
+TEST_DEBUGGER=$debugger
+export TEST_DEBUGGER
+
 # Overall status
 
 status=true
@@ -16,7 +19,7 @@ run_a_test ()
     script=$1
     shift
 
-    if ./$script $@ ; then
+    if ./run-one-test.sh $script $@ ; then
         echo "... passed"
     else
         echo "... FAILED"
@@ -41,10 +44,11 @@ echo ""
 ./is-fast-math message
 
 
-# Loop round the different test types
+# Get the list of tests
 
-TEST_DEBUGGER=$debugger
-export TEST_DEBUGGER
+scripts=`echo *.osm | sed -e s/.osm/.sh/g`
+
+# Loop round the different test types
 
 for type in 1 2 3; do
 
@@ -66,17 +70,17 @@ for type in 1 2 3; do
             ;;
     esac
 
-    # Normal mode
+    # Run the script (non-slim mode)
 
-    for script in $@; do
+    for script in $scripts; do
         echo ""
         echo "Testing: $script (non-slim, $description) ... "
         run_a_test $script fat $arg
     done
 
-    # Normal mode
+    # Run the script (slim mode)
 
-    for script in $@; do
+    for script in $scripts; do
         echo ""
         echo "Testing: $script (slim, $description) ... "
         run_a_test $script slim $arg
@@ -109,5 +113,8 @@ for type in 1 2 3; do
     fi
 
 done
+
+
+# Finish
 
 exit 0
