@@ -2,7 +2,7 @@
 #
 # Part of the Routino routing software.
 #
-# This file Copyright 2013-2017 Andrew M. Bishop
+# This file Copyright 2013-2018 Andrew M. Bishop
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -91,7 +91,7 @@ FIXME_FINDER_OBJ=fixme-finder.o osmparser.o \
 	       	 $(ROUTINO_SRC)/uncompress.o $(ROUTINO_SRC)/osmxmlparse.o $(ROUTINO_SRC)/osmpbfparse.o $(ROUTINO_SRC)/osmo5mparse.o
 
 ifeq ($(HOST),MINGW)
-FIXME_FINDER_OBJ+=$(ROUTINO_SRC)/mman-win32.o
+  FIXME_FINDER_OBJ+=$(ROUTINO_SRC)/mman-win32.o
 endif
 
 fixme-finder$(.EXE) : $(FIXME_FINDER_OBJ)
@@ -108,7 +108,7 @@ FIXME_FINDER_SLIM_OBJ=fixme-finder-slim.o osmparser.o \
 	       	      $(ROUTINO_SRC)/uncompress.o $(ROUTINO_SRC)/osmxmlparse.o $(ROUTINO_SRC)/osmpbfparse.o $(ROUTINO_SRC)/osmo5mparse.o
 
 ifeq ($(HOST),MINGW)
-FIXME_FINDER_SLIM_OBJ+=$(ROUTINO_SRC)/mman-win32.o
+  FIXME_FINDER_SLIM_OBJ+=$(ROUTINO_SRC)/mman-win32.o
 endif
 
 fixme-finder-slim$(.EXE) : $(FIXME_FINDER_SLIM_OBJ)
@@ -121,7 +121,7 @@ FIXME_DUMPER_OBJ=fixme-dumper.o \
 	         $(ROUTINO_SRC)/files.o $(ROUTINO_SRC)/logging.o $(ROUTINO_SRC)/xmlparse.o
 
 ifeq ($(HOST),MINGW)
-FIXME_DUMPER_OBJ+=$(ROUTINO_SRC)/mman-win32.o
+  FIXME_DUMPER_OBJ+=$(ROUTINO_SRC)/mman-win32.o
 endif
 
 fixme-dumper$(.EXE) : $(FIXME_DUMPER_OBJ)
@@ -134,7 +134,7 @@ FIXME_DUMPER_SLIM_OBJ=fixme-dumper-slim.o \
 	              $(ROUTINO_SRC)/files.o $(ROUTINO_SRC)/logging.o $(ROUTINO_SRC)/xmlparse.o
 
 ifeq ($(HOST),MINGW)
-FIXME_DUMPER_SLIM_OBJ+=$(ROUTINO_SRC)/mman-win32.o
+  FIXME_DUMPER_SLIM_OBJ+=$(ROUTINO_SRC)/mman-win32.o
 endif
 
 fixme-dumper-slim$(.EXE) : $(FIXME_DUMPER_SLIM_OBJ)

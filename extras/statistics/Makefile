@@ -2,7 +2,7 @@
 #
 # Part of the Routino routing software.
 #
-# This file Copyright 2008-2017 Andrew M. Bishop
+# This file Copyright 2008-2018 Andrew M. Bishop
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -45,7 +45,7 @@ DUMPER_OBJ=dumper.o \
            $(ROUTINO_SRC)/sorting.o
 
 ifeq ($(HOST),MINGW)
-DUMPER_OBJ+=$(ROUTINO_SRC)/mman-win32.o
+  DUMPER_OBJ+=$(ROUTINO_SRC)/mman-win32.o
 endif
 
 dumper$(.EXE) : $(DUMPER_OBJ)
@@ -57,7 +57,7 @@ DUMPER_SLIM_OBJ=dumper-slim.o \
            $(ROUTINO_SRC)/sorting.o
 
 ifeq ($(HOST),MINGW)
-DUMPER_SLIM_OBJ+=$(ROUTINO_SRC)/mman-win32.o
+  DUMPER_SLIM_OBJ+=$(ROUTINO_SRC)/mman-win32.o
 endif
 
 dumper-slim$(.EXE) : $(DUMPER_SLIM_OBJ)

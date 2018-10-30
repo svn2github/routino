@@ -2,7 +2,7 @@
 #
 # Part of the Routino routing software.
 #
-# This file Copyright 2008-2015, 2017 Andrew M. Bishop
+# This file Copyright 2008-2015, 2017, 2018 Andrew M. Bishop
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -38,23 +38,23 @@ EXE=planetsplitter$(.EXE) planetsplitter-slim$(.EXE) router$(.EXE) router-slim$(
     router+lib$(.EXE) router+lib-slim$(.EXE)
 
 ifneq ($(HOST),MINGW)
-LIB =libroutino.so               libroutino-slim.so
-LIB+=libroutino.so.$(SOVERSION)  libroutino-slim.so.$(SOVERSION)
-LIB+=libroutino.so.$(LIBVERSION) libroutino-slim.so.$(LIBVERSION)
+  LIB =libroutino.so               libroutino-slim.so
+  LIB+=libroutino.so.$(SOVERSION)  libroutino-slim.so.$(SOVERSION)
+  LIB+=libroutino.so.$(LIBVERSION) libroutino-slim.so.$(LIBVERSION)
 else
-LIB =routino.dll routino-slim.dll
-LIB+=routino.def routino-slim.def
-LIB+=routino.lib routino-slim.lib
+  LIB =routino.dll routino-slim.dll
+  LIB+=routino.def routino-slim.def
+  LIB+=routino.lib routino-slim.lib
 endif
 
 INC=routino.h
 
 ifneq ($(HOST),MINGW)
-LINK_LIB=libroutino.so
-LINK_SLIM_LIB=libroutino-slim.so
+  LINK_LIB=libroutino.so
+  LINK_SLIM_LIB=libroutino-slim.so
 else
-LINK_LIB=routino.dll
-LINK_SLIM_LIB=routino-slim.dll
+  LINK_LIB=routino.dll
+  LINK_SLIM_LIB=routino-slim.dll
 endif
 
 ########
@@ -81,7 +81,7 @@ PLANETSPLITTER_OBJ=planetsplitter.o \
 	           uncompress.o osmxmlparse.o osmpbfparse.o osmo5mparse.o osmparser.o
 
 ifeq ($(HOST),MINGW)
-PLANETSPLITTER_OBJ+=mman-win32.o
+  PLANETSPLITTER_OBJ+=mman-win32.o
 endif
 
 planetsplitter$(.EXE) : $(PLANETSPLITTER_OBJ)
@@ -98,7 +98,7 @@ PLANETSPLITTER_SLIM_OBJ=planetsplitter-slim.o \
 	                uncompress.o osmxmlparse.o osmpbfparse.o osmo5mparse.o osmparser.o
 
 ifeq ($(HOST),MINGW)
-PLANETSPLITTER_SLIM_OBJ+=mman-win32.o
+  PLANETSPLITTER_SLIM_OBJ+=mman-win32.o
 endif
 
 planetsplitter-slim$(.EXE) : $(PLANETSPLITTER_SLIM_OBJ)
@@ -113,7 +113,7 @@ ROUTER_OBJ=router.o \
 	   results.o queue.o translations.o
 
 ifeq ($(HOST),MINGW)
-ROUTER_OBJ+=mman-win32.o
+  ROUTER_OBJ+=mman-win32.o
 endif
 
 router$(.EXE) : $(ROUTER_OBJ)
@@ -128,7 +128,7 @@ ROUTER_SLIM_OBJ=router-slim.o \
 	        results.o queue.o translations.o
 
 ifeq ($(HOST),MINGW)
-ROUTER_SLIM_OBJ+=mman-win32.o
+  ROUTER_SLIM_OBJ+=mman-win32.o
 endif
 
 router-slim$(.EXE) : $(ROUTER_SLIM_OBJ)
@@ -140,7 +140,7 @@ FILEDUMPERX_OBJ=filedumperx.o \
 	        files.o logging.o
 
 ifeq ($(HOST),MINGW)
-FILEDUMPERX_OBJ+=mman-win32.o
+  FILEDUMPERX_OBJ+=mman-win32.o
 endif
 
 filedumperx$(.EXE) : $(FILEDUMPERX_OBJ)
@@ -154,7 +154,7 @@ FILEDUMPER_OBJ=filedumper.o \
 	       files.o logging.o xmlparse.o
 
 ifeq ($(HOST),MINGW)
-FILEDUMPER_OBJ+=mman-win32.o
+  FILEDUMPER_OBJ+=mman-win32.o
 endif
 
 filedumper$(.EXE) : $(FILEDUMPER_OBJ)
@@ -168,7 +168,7 @@ FILEDUMPER_SLIM_OBJ=filedumper-slim.o \
 	       files.o logging.o xmlparse.o
 
 ifeq ($(HOST),MINGW)
-FILEDUMPER_SLIM_OBJ+=mman-win32.o
+  FILEDUMPER_SLIM_OBJ+=mman-win32.o
 endif
 
 filedumper-slim$(.EXE) : $(FILEDUMPER_SLIM_OBJ)
@@ -203,7 +203,7 @@ LIBROUTINO_OBJ=routino-lib.o \
 	        results-lib.o queue-lib.o translations-lib.o
 
 ifeq ($(HOST),MINGW)
-LIBROUTINO_OBJ+=mman-win32.o
+  LIBROUTINO_OBJ+=mman-win32.o
 endif
 
 libroutino.so.$(LIBVERSION) : $(LIBROUTINO_OBJ)
@@ -233,7 +233,7 @@ LIBROUTINO_SLIM_OBJ=routino-slim-lib.o \
 	        results-lib.o queue-lib.o translations-lib.o
 
 ifeq ($(HOST),MINGW)
-LIBROUTINO_SLIM_OBJ+=mman-win32.o
+  LIBROUTINO_SLIM_OBJ+=mman-win32.o
 endif
 
 libroutino-slim.so.$(LIBVERSION) : $(LIBROUTINO_SLIM_OBJ)

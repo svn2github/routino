@@ -2,7 +2,7 @@
 #
 # Part of the Routino routing software.
 #
-# This file Copyright 2013-2015, 2017 Andrew M. Bishop
+# This file Copyright 2013-2015, 2017, 2018 Andrew M. Bishop
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -44,7 +44,7 @@ TAGMODIFIER_OBJ=tagmodifier.o \
 	        $(ROUTINO_SRC)/uncompress.o $(ROUTINO_SRC)/xmlparse.o $(ROUTINO_SRC)/tagging.o
 
 ifeq ($(HOST),MINGW)
-TAGMODIFIER_OBJ+=$(ROUTINO_SRC)/mman-win32.o
+  TAGMODIFIER_OBJ+=$(ROUTINO_SRC)/mman-win32.o
 endif
 
 tagmodifier$(.EXE) : $(TAGMODIFIER_OBJ)
