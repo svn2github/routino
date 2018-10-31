@@ -9,23 +9,32 @@ around that library.
 Compilation
 -----------
 
-A working Python 3 installation and the Swig tool are required to be able to
-compile this Python module, run 'make'.
+To compile the Python module run 'make'.  A working Python 3 installation and
+the Swig tool are required to be able to compile this Python module.  If they
+are not available then a warning will be printed but no error occur.
+
+Running 'make' in the top level directory will also try to build the module.
+
+Testing
+-------
+
+To run the test scripts run 'make test'.  The tests verify that the results of
+the Python version are identical to the results of the compiled version.
+
+Running 'make test' in the top level directory will also try to run the tests
+for the Python module.
 
 Installation
 ------------
 
-To install the Python module run 'python setup.py install'.
+To install the Python module run 'make install'.  The installation directory is
+the one defined in 'Makefile.conf'.
 
-Running
--------
+Running 'make install' in the top level directory will also try to install the
+module.
 
-Test scripts are included in the 'test' directory, run 'make test' to run them.
-The tests verify that the results of the Python version are identical to the
-results of the compiled version.
-
-To run the test scripts the path to the compiled Python module and the
-libroutino library are set up automatically, no installation is required.
+Using
+-----
 
 To use the Python module normally it must be installed and the libroutino
 library must also be installed in a directory that is searched for libraries.

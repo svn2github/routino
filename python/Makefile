@@ -24,9 +24,9 @@ include ../Makefile.conf
 
 # Programs
 
-SWIG=swig
-
 PYTHON=python3
+
+SWIG=swig
 
 # Compilation targets
 
@@ -36,15 +36,37 @@ C_FILES=$(wildcard src/*.c)
 
 SWIG_C=src/_router.c
 
+ifneq ($(HOST),MINGW)
+  LIBROUTINO=../src/libroutino.so
+else
+  LIBROUTINO=../src/routino.dll
+endif
+
 BUILD_TIMESTAMP=build/.timestamp
 
+# Check that we have Python3 and swig installed
+
+HAVE_PYTHON=$(shell $(PYTHON) --version 2> /dev/null)
+
+HAVE_SWIG=$(shell $(SWIG) -version 2> /dev/null)
+
+ifeq ($(HAVE_PYTHON),)
+  $(warning Python3 not installed - skipping Python module creation)
+endif
+
+ifeq ($(HAVE_SWIG),)
+  $(warning Swig not installed - skipping Python module creation)
+endif
+
 ########
 
-all: $(BUILD_TIMESTAMP)
+all: $(and $(HAVE_SWIG),$(HAVE_PYTHON),all-if-python)
+
+all-if-python: $(BUILD_TIMESTAMP)
 
 ########
 
-$(BUILD_TIMESTAMP): $(SWIG_C) $(PY_FILES) $(C_FILES) setup.py
+$(BUILD_TIMESTAMP): $(SWIG_C) $(PY_FILES) $(C_FILES) $(LIBROUTINO) setup.py
 	@rm -f $@
 	$(PYTHON) setup.py build && touch $(BUILD_TIMESTAMP)
 
@@ -54,25 +76,43 @@ src/_router.c : src/router.i ../src/routino.h
 src/%.o : src/%.c
 	$(CC) -c $(CFLAGS) $< -o $@
 
+$(LIBROUTINO):
+	cd ../src && $(MAKE) all-lib
+
 ########
 
-test: $(BUILD_TIMESTAMP)
+test: $(and $(HAVE_SWIG),$(HAVE_PYTHON),test-if-python)
+
+test-if-python: $(BUILD_TIMESTAMP)
+	cd test && $(MAKE) test
+
+########
+
+install: $(and $(HAVE_SWIG),$(HAVE_PYTHON),install-if-python)
+
+install-if-python:
+	$(PYTHON) setup.py install --prefix $(prefix)
+
+########
+
+clean: clean-local
 	cd test && $(MAKE) $@
 
-########
-
-install: all
-
-########
-
-clean:
+clean-local:
 	rm -f *~
 
 ########
 
-distclean:
+distclean: distclean-local
+	cd test && $(MAKE) $@
+
+distclean-local:
 	rm -rf build
 
 ########
 
 .PHONY:: all test install clean distclean
+
+.PHONY:: all-if-python test-if-python install-if-python
+
+.PHONY:: clean-local distclean-local

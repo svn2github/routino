@@ -30,20 +30,17 @@ EXE=$(TESTDIR)/is-fast-math$(.EXE)
 
 ########
 
-all :
+all:
 
 ########
 
-test : test-exe $(EXE)
+test: $(EXE)
 	@./run-all-tests.sh
 
 ########
 
-test-exe :
-	cd $(TESTDIR)/.. && $(MAKE) all-exe all-lib
-
-$(EXE) :
-	cd $(TESTDIR) && $(MAKE) $(EXE)
+$(EXE):
+	cd $(TESTDIR) && $(MAKE) test
 
 ########
 
@@ -63,5 +60,3 @@ distclean: clean
 ########
 
 .PHONY:: all test install clean distclean
-
-.PHONY:: test-exe
