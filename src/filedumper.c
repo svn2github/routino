@@ -609,13 +609,13 @@ static void print_turn_relation(Relations *relations,index_t item,Segments *segm
 
     if(seg==relationp->from)
       {
-       from_node=OtherNode(segmentp,relationp->from);
+       from_node=OtherNode(segmentp,relationp->via);
        from_way=segmentp->way;
       }
 
     if(seg==relationp->to)
       {
-       to_node=OtherNode(segmentp,relationp->to);
+       to_node=OtherNode(segmentp,relationp->via);
        to_way=segmentp->way;
       }
 
