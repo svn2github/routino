@@ -35,7 +35,8 @@ all:
 ########
 
 test: $(EXE)
-	@./run-all-tests.sh
+	@./run-router-tests.sh
+	@./run-database-tests.sh
 
 ########
 

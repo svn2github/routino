@@ -33,8 +33,10 @@ SWIG=swig
 PY_FILES=$(wildcard src/*.py)
 
 C_FILES=$(wildcard src/*.c)
+CC_FILES=$(wildcard src/*.cc)
 
 SWIG_C=src/_router.c
+SWIG_CC=src/_database.cc
 
 ifneq ($(HOST),MINGW)
   LIBROUTINO=../src/libroutino.so
@@ -66,15 +68,21 @@ all-if-python: $(BUILD_TIMESTAMP)
 
 ########
 
-$(BUILD_TIMESTAMP): $(SWIG_C) $(PY_FILES) $(C_FILES) $(LIBROUTINO) setup.py
+$(BUILD_TIMESTAMP): $(SWIG_C) $(SWIG_CC) $(PY_FILES) $(C_FILES) $(CC_FILES) $(LIBROUTINO) setup.py
 	@rm -f $@
 	$(PYTHON) setup.py build && touch $(BUILD_TIMESTAMP)
 
 src/_router.c : src/router.i ../src/routino.h
 	$(SWIG) -python -o $@ $<
 
+src/_database.cc : src/database.i src/database.hh
+	$(SWIG) -c++ -python -o $@ $<
+
 src/%.o : src/%.c
 	$(CC) -c $(CFLAGS) $< -o $@
+
+src/%.o : src/%.cc
+	$(CXX) -c $(CFLAGS) $< -o $@
 
 $(LIBROUTINO):
 	cd ../src && $(MAKE) all-lib
@@ -90,7 +98,7 @@ test-if-python: $(BUILD_TIMESTAMP)
 
 install: $(and $(HAVE_SWIG),$(HAVE_PYTHON),install-if-python)
 
-install-if-python:
+install-if-python: all
 	$(PYTHON) setup.py install --prefix $(prefix)
 
 ########

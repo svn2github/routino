@@ -28,6 +28,18 @@ routino_router = Extension('routino._router',
                            library_dirs = ['../src'],
                            libraries = ['routino'])
 
+lib_files = []
+
+for file in os.listdir('../src'):
+    if re.search("-lib.o", file) and not re.search("-slim-lib.o", file):
+        lib_files.append("../src/" + file)
+
+routino_database = Extension('routino._database',
+                             sources = ['src/_database.cc', 'src/database.cc'],
+                             include_dirs = ['../src'],
+                             extra_objects = lib_files,
+                             library_dirs = ['../src'])
+
 setup (name = 'Routino',
        version = '1.0',
        author="Andrew M. Bishop", author_email='amb@routino.org',
@@ -35,5 +47,5 @@ setup (name = 'Routino',
        description = 'Interfaces to Routino in Python',
        packages = ['routino'],
        package_dir = {'routino': 'src'},
-       py_modules = ['routino', 'routino.router'],
-       ext_modules = [routino_router])
+       py_modules = ['routino', 'routino.router', 'routino.database'],
+       ext_modules = [routino_router, routino_database])

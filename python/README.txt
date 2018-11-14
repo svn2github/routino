@@ -2,9 +2,7 @@
                                  ==============
 
 This directory contains a Python version 3 interface to the Routino routing
-database that allows routes to be calculated.  The same functionality as the
-Routino library (libroutino) is provided because it is implemented as a wrapper
-around that library.
+database that allows routes to be calculated and the database to be accessed.
 
 Compilation
 -----------
@@ -33,10 +31,26 @@ the one defined in 'Makefile.conf'.
 Running 'make install' in the top level directory will also try to install the
 module.
 
-Using
------
+Using - Router
+--------------
 
 To use the Python module normally it must be installed and the libroutino
 library must also be installed in a directory that is searched for libraries.
+
 The Python example router 'router.py' accepts the same command line arguments as
 the compiled versions.
+
+The Python module supports exactly the same functionality as the Routino library
+(libroutino) because it is implemented simply as a wrapper around that library.
+The documentation for using the library (and therefore the Python module) is
+available in the files "doc/LIBRARY.txt" and "doc/html/library.html".
+
+Using - Database
+----------------
+
+To use the Python module normally it must be installed, the libroutino library
+is not required for the database access functions.
+
+The Python script database.py' is an example of using the Python module for
+accessing a Routino database (one created by 'make test').  No further
+documentation is provided, all possible features are used in the example script.
