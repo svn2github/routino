@@ -12,7 +12,7 @@ set -e
 
 name=`basename $1 .sh`
 
-# Libroutino or not libroutino
+# Libroutino location
 
 LD_LIBRARY_PATH=$testdir/..:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH

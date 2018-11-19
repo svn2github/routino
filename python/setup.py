@@ -28,6 +28,10 @@ routino_router = Extension('routino._router',
                            library_dirs = ['../src'],
                            libraries = ['routino'])
 
+# Note: the database needs access to all symbols, not just those
+# exported by the libroutino library so it must link with the object
+# files and not just the library.
+
 lib_files = []
 
 for file in os.listdir('../src'):
